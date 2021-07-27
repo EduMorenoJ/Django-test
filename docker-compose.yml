@@ -21,6 +21,7 @@ services:
       - ./.envs/.postgres
     volumes:
       - .:/code
+      - ../works_metadata.csv:/works_metadata.csv
       - django_data:/django_data
     ports:
       - "8000:8000"
