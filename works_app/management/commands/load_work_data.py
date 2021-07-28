@@ -1,6 +1,7 @@
 from django.core.management import BaseCommand
 from works_app.models import Work
 from works_app.utils import group_by_title_and_iswc_and_remove_duplicates
+from django.db import IntegrityError
 
 
 class Command(BaseCommand):
@@ -12,10 +13,12 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         formated_data = group_by_title_and_iswc_and_remove_duplicates(
             kwargs['path'])
-
-        for row in formated_data:
-            work = Work.objects.create(
-                title=row['title'],
-                contributors=row['contributors'],
-                iswc=row['iswc']
-            )
+        try:
+            for row in formated_data:
+                work = Work.objects.create(
+                    title=row['title'],
+                    contributors=row['contributors'],
+                    iswc=row['iswc']
+                )
+        except IntegrityError:
+            pass
