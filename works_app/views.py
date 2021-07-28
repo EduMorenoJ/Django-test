@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from django.views.generic.list import ListView
@@ -16,15 +16,15 @@ class WorkViewSet(viewsets.ModelViewSet):
     serializer_class = WorkSerializer
 
 
-@api_view(['GET', 'POST'])
-def work_list(request):
 
-    if request.method == 'GET':
+class WorkList(APIView):
+
+    def get(self, request, format=None):
         works = Work.objects.all()
         serializer = WorkSerializer(works, many=True)
         return Response(serializer.data)
 
-    elif request.method == 'POST':
+    def post(self, request, format=None):
         data = JSONParser().parse(request)
         serializer = WorkSerializer(data=data)
         if serializer.is_valid():
@@ -33,19 +33,22 @@ def work_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def work_detail(request, pk):
 
-    try:
-        work = Work.objects.get(pk=pk)
-    except Work.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+class WorkDetail(APIView):
 
-    if request.method == 'GET':
+    def get_object(self, pk):
+        try:
+            return Work.objects.get(pk=pk)
+        except Work.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def get(self, request, pk, format=None):
+        work = self.get_object(pk)
         serializer = WorkSerializer(work)
         return Response(serializer.data)
 
-    elif request.method == 'PUT':
+    def put(self, request, pk, format=None):
+        work = self.get_object(pk)
         data = JSONParser().parse(request)
         serializer = WorkSerializer(work, data=data)
         if serializer.is_valid():
@@ -53,6 +56,7 @@ def work_detail(request, pk):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
+    def delete(self, request, pk, format=None):
+        work = self.get_object(pk)
         work.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
