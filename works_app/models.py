@@ -12,4 +12,4 @@ class Work(models.Model):
         models.CharField(max_length=200, blank=True),
         size=50
     )
-    iswc = models.CharField(max_length=200)
+    iswc = models.CharField(max_length=200, primary_key=True)
