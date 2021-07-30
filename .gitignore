@@ -135,7 +135,6 @@ dmypy.json
 
 # VSCode plugin
 .history/
-.envs/.postgres
 single_view/__pycache__/settings.cpython-39.pyc
 single_view/__pycache__/urls.cpython-39.pyc
 single_view/__pycache__/settings.cpython-39.pyc
