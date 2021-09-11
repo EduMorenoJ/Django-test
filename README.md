@@ -2,7 +2,6 @@
 
 I've developed this test following [Django Docs](https://docs.djangoproject.com/en/3.2/) for the first part of the test and [Django Rest Framework Docs](https://www.django-rest-framework.org/).
 
-
 ## Intructions
 
 First of all, build and deploy the containers
